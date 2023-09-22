@@ -75,7 +75,7 @@
 		<div class="w-1/2 h-full m-2">
 			<div class="h-full">
 				<h1 class="h3">User Detail View</h1>
-				<TabGroup>
+				<TabGroup class="w-[40vw]">
 					<Tab bind:group={tabSet} name="tab1" value={0}>Personal</Tab>
 					<Tab bind:group={tabSet} name="tab2" value={1}>Club/Teams</Tab>
 					<Tab bind:group={tabSet} name="tab3" value={2}>Password</Tab>
@@ -83,9 +83,9 @@
 					<!-- Tab Panels --->
 					<svelte:fragment slot="panel">
 						{#if tabSet === 0}
-							<div class="flex flex-col w-full">
-								<div class="flex flex-row">
-									<label class="label w-1/2">
+							<div class="grid grid-cols-2 grid-rows-3 gap-4">
+								
+									<label class="label col-start-1 row-start-1">
 										<span>UUID:</span>
 										<input
 											bind:value={selecet_User.UUID}
@@ -95,9 +95,7 @@
 											disabled
 										/>
 									</label>
-								</div>
-								<div class="flex flex-row mt-[2vh]">
-									<label class="label">
+									<label class="label col-start-1 row-start-2">
 										<span>Firstname:</span>
 										<input
 											bind:value={selecet_User.firstname}
@@ -106,7 +104,7 @@
 											placeholder="Input"
 										/>
 									</label>
-									<label class="label ml-[3vw]">
+									<label class="label col-start-2 row-start-2">
 										<span>Lastname:</span>
 										<input
 											bind:value={selecet_User.lastname}
@@ -115,7 +113,24 @@
 											placeholder="Input"
 										/>
 									</label>
-								</div>
+									<label class="label col-start-1 row-start-3">
+										<span>Email:</span>
+										<input
+											bind:value={selecet_User.firstname}
+											class="input"
+											type="text"
+											placeholder="Input"
+										/>
+									</label>
+									<label class="label col-start-2 row-start-3">
+										<span>Role:</span>
+										<input
+											bind:value={selecet_User.lastname}
+											class="input"
+											type="text"
+											placeholder="Input"
+										/>
+									</label>
 							</div>
 						{:else if tabSet === 1}
 							<div class="flex flex-col">
