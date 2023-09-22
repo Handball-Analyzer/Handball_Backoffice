@@ -15,7 +15,7 @@
 		<a href="/accounts">Customer</a>
 		<a href="/club">Club</a>
 		<a hidden href="/statistics">Statistics</a>
-		<a hidden href="/messages">Messages</a>
+		<a href="/messages">Messages</a>
 	</div>
 	<svelte:fragment slot="trail"><button class="btn variant-filled">Logout</button></svelte:fragment>
 </AppBar>
