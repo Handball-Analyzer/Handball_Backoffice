@@ -32,6 +32,18 @@ const tableSimple: TableSource = {
 		</div>
 		<Table source={tableSimple} />
 	</div>
+	<div class="h-[70vh] w-[60vw] card m-5">
+		<div class="card-header">
+			<h3 class="card-title">Chat</h3>
+		</div>
+		
+		<div class="card-footer">
+			<button class="btn variant-filled">
+				Send
+			</button>
+		</div>
+
+	</div>
 </main>
 
 <style>
