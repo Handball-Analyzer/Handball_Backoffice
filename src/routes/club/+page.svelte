@@ -3,6 +3,7 @@
 	import type { TableSource } from '@skeletonlabs/skeleton';
 	import { tableMapperValues } from '@skeletonlabs/skeleton';
 	import { TabGroup, Tab, TabAnchor } from '@skeletonlabs/skeleton';
+	import Gym from "../../lib/data/Gym.json"
 
 	const sourceData = [
 		{
@@ -31,33 +32,7 @@
 			halle: 'Ballspielhalle'
 		}
 	];
-	const gyms = [
-		{
-			UUID: 123345,
-			Name: 'VFL Waiblingen',
-			adress: 'Beinsteinerstr. 160',
-			halle: 'Rundsporthalle'
-		},
-		{
-			UUID: 123346,
-			Name: 'TSV Schmiden',
-			adress: 'Fellbacher Straße 45',
-			halle: 'Sporthalle am Schulzentrum'
-		},
-		{ UUID: 123347, Name: 'TV Oeffingen', adress: 'Kellerstraße 45', halle: 'Sporthalle' },
-		{
-			UUID: 123347,
-			Name: 'HSC Schmoeff',
-			adress: 'Fellbacher Straße 45',
-			halle: 'Sporthalle am Schulzentrum'
-		},
-		{
-			UUID: 123347,
-			Name: 'TV Bittenfeld',
-			adress: 'Bittenfelderstraße 120',
-			halle: 'Ballspielhalle'
-		}
-	];
+	const gyms = Gym;
 	const teams = [
 		{ UUID: 123456, gender: 'g', age_group: 'E', Coach: 'Felix Link', number: 1 },
 		{ UUID: 123456, gender: 'm', age_group: 'D', Coach: 'Felix Link', number: 1 },
@@ -105,7 +80,10 @@
 </script>
 
 <main class="m-3">
-	<h1 class="h2 ml-2 mb-2">Clubs</h1>
+	<div class="flex flex-row w-screen justify-between ">
+		<h1 class="h2 ">Accounts</h1>
+		<a href="/addclub"><button class="btn variant-filled-primary mr-[5vw]">Add New</button></a>
+	</div>
 	<div class="flex flex-row items-top h-[60vh]">
 		<div class="w-1/2 h-full m-2">
 			<div class="flex flex-row justify-between mb-1">
@@ -120,9 +98,10 @@
 				<TabGroup>
 					<Tab bind:group={tabSet} name="tab1" value={0}>General</Tab>
 					<Tab bind:group={tabSet} name="tab2" value={1}>Hallen</Tab>
-					<Tab bind:group={tabSet} name="tab3" value={2}>Teams</Tab>
-					<Tab bind:group={tabSet} name="tab3" value={3}>Extensions</Tab>
-					<Tab bind:group={tabSet} name="tab3" value={4}>Abo</Tab>
+					<Tab bind:group={tabSet} name="tab3" value={2}>Ansprechpartner</Tab>
+					<Tab bind:group={tabSet} name="tab3" value={3}>Teams</Tab>
+					<Tab bind:group={tabSet} name="tab3" value={4}>Extensions</Tab>
+					<Tab bind:group={tabSet} name="tab3" value={5}>Abo</Tab>
 					<!-- Tab Panels --->
 					<svelte:fragment slot="panel">
 						{#if tabSet === 0}
@@ -165,8 +144,8 @@
 								{#each gyms as gym}
 									<div>
 										<span class="flex-auto">
-											<dt>{gym.halle}</dt>
-											<dd>{gym.adress}</dd>
+											<dt>{gym.Halle}</dt>
+											<dd>{gym.Adress}</dd>
 										</span>
 									</div>
 								{/each}
@@ -174,6 +153,8 @@
 								<!-- ... -->
 							</dl>
 						{:else if tabSet === 2}
+							<p>Tab 2</p>
+						{:else if tabSet === 3}
 							<div class="overflow-scroll h-[47vh]">
 								<dl class="list-dl">
 									{#each teams as team}
@@ -188,9 +169,9 @@
 									<!-- ... -->
 								</dl>
 							</div>
-						{:else if tabSet === 3}
-							<p>Tab 4</p>
 						{:else if tabSet === 4}
+							<p>Tab 4</p>
+						{:else if tabSet === 5}
 							<div class="flex flex-col">
 								<div class="flex flex-row">
 									<label class="label">
@@ -205,10 +186,13 @@
 					</svelte:fragment>
 				</TabGroup>
 			</div>
+			{#if selecet_Club.UUID != ''}
 			<button
-				class="float-right btn variant-filled"
-				on:click={() => alert('Wurde Erfolgreich gespeichert!')}>Save</button
-			>
+			class="float-right btn variant-filled"
+			on:click={() => alert('Wurde Erfolgreich gespeichert!'+selecet_Club.UUID)}>Save</button
+		>
+			{/if}
+			
 		</div>
 	</div>
 </main>

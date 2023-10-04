@@ -3,38 +3,24 @@
 	import type { TableSource } from '@skeletonlabs/skeleton';
 	import { tableMapperValues } from '@skeletonlabs/skeleton';
 	import { TabGroup, Tab, TabAnchor } from '@skeletonlabs/skeleton';
+	import Users from "../../lib/data/User.json"
 
-	const sourceData = [
-		{ UUID: 123345, firstname: 'Hanes', lastname: 'Müller', Verein: 'VFL Waiblingen' },
-		{ UUID: 123346, firstname: 'Manuel', lastname: 'Mayer', Verein: 'VFL Waiblingen' },
-		{ UUID: 123347, firstname: 'Sabrina', lastname: 'Ballschmied', Verein: 'VFL Waiblingen' },
-		{ UUID: 123348, firstname: 'Thomas', lastname: 'Henkel', Verein: 'VFL Waiblingen' },
-		{ UUID: 123349, firstname: 'Theodor', lastname: 'Moor', Verein: 'TV Oeffingen' },
-		{ UUID: 123340, firstname: 'Felix', lastname: 'Katnitsch', Verein: 'TSV Schmiden' },
-		{ UUID: 123345, firstname: 'Hanes', lastname: 'Müller', Verein: 'VFL Waiblingen' },
-		{ UUID: 123346, firstname: 'Manuel', lastname: 'Mayer', Verein: 'VFL Waiblingen' },
-		{ UUID: 123347, firstname: 'Sabrina', lastname: 'Ballschmied', Verein: 'VFL Waiblingen' },
-		{ UUID: 123348, firstname: 'Thomas', lastname: 'Henkel', Verein: 'VFL Waiblingen' },
-		{ UUID: 123349, firstname: 'Theodor', lastname: 'Moor', Verein: 'TV Oeffingen' },
-		{ UUID: 123340, firstname: 'Felix', lastname: 'Katnitsch', Verein: 'TSV Schmiden' },
-		{ UUID: 123345, firstname: 'Hanes', lastname: 'Müller', Verein: 'VFL Waiblingen' },
-		{ UUID: 123346, firstname: 'Manuel', lastname: 'Mayer', Verein: 'VFL Waiblingen' },
-		{ UUID: 123347, firstname: 'Sabrina', lastname: 'Ballschmied', Verein: 'VFL Waiblingen' },
-		{ UUID: 123348, firstname: 'Thomas', lastname: 'Henkel', Verein: 'VFL Waiblingen' },
-		{ UUID: 123349, firstname: 'Theodor', lastname: 'Moor', Verein: 'TV Oeffingen' },
-		{ UUID: 123340, firstname: 'Felix', lastname: 'Katnitsch', Verein: 'TSV Schmiden' }
-	];
+	const sourceData = Users
 	type User = {
 		UUID: string;
 		firstname: string;
 		lastname: string;
 		verein: string;
+		email: string;
+		role: string;
 	};
 	let selecet_User: User = {
 		UUID: '',
 		firstname: '',
 		lastname: '',
-		verein: ''
+		verein: '',
+		email: '',
+		role: ''
 	};
 
 	const tableSimple: TableSource = {
@@ -43,7 +29,7 @@
 		// The data visibly shown in your table body UI.
 		body: tableMapperValues(sourceData, ['UUID', 'firstname', 'lastname', 'Verein']),
 		// Optional: The data returned when interactive is enabled and a row is clicked.
-		meta: tableMapperValues(sourceData, ['UUID', 'firstname', 'lastname', 'Verein']),
+		meta: tableMapperValues(sourceData, ['UUID', 'firstname', 'lastname', 'Verein', 'email', 'role']),
 		// Optional: A list of footer labels.
 		foot: ['', 'Total', '', '<code class="code">' + sourceData.length + '</code>']
 	};
@@ -54,7 +40,9 @@
 			UUID: seleceted_row[0],
 			firstname: seleceted_row[1],
 			lastname: seleceted_row[2],
-			verein: seleceted_row[3]
+			verein: seleceted_row[3],
+			email: seleceted_row[4],
+			role: seleceted_row[5]
 		};
 	}
 
@@ -62,7 +50,10 @@
 </script>
 
 <main class="m-3">
-	<h1 class="h2 ml-2 mb-2">Accounts</h1>
+	<div class="flex flex-row w-screen justify-between ">
+		<h1 class="h2 ">Accounts</h1>
+		<a href="/addaccount"><button class="btn variant-filled-primary mr-[5vw]">Add New</button></a>
+	</div>
 	<div class="flex flex-row items-top h-[60vh]">
 		<div class="w-1/2 h-full m-2">
 			<div class="flex flex-row justify-between mb-1">
@@ -116,7 +107,7 @@
 									<label class="label col-start-1 row-start-3">
 										<span>Email:</span>
 										<input
-											bind:value={selecet_User.firstname}
+											bind:value={selecet_User.email}
 											class="input"
 											type="text"
 											placeholder="Input"
@@ -125,7 +116,7 @@
 									<label class="label col-start-2 row-start-3">
 										<span>Role:</span>
 										<input
-											bind:value={selecet_User.lastname}
+											bind:value={selecet_User.role}
 											class="input"
 											type="text"
 											placeholder="Input"
@@ -170,10 +161,13 @@
 					</svelte:fragment>
 				</TabGroup>
 			</div>
+			{#if selecet_User.UUID != ''}
 			<button
-				class="float-right btn variant-filled"
-				on:click={() => alert('Wurde Erfolgreich gespeichert!')}>Save</button
-			>
+			class="float-right btn variant-filled"
+			on:click={() => alert('Wurde Erfolgreich gespeichert!')}>Save</button
+		>
+			{/if}
+
 		</div>
 	</div>
 </main>
