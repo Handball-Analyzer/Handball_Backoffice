@@ -4,34 +4,9 @@
 	import { tableMapperValues } from '@skeletonlabs/skeleton';
 	import { TabGroup, Tab } from '@skeletonlabs/skeleton';
 	import Gym from '../../lib/data/Gym.json';
+	import Clubs from '../../lib/data/Club.json'
 
-	const sourceData = [
-		{
-			UUID: 123345,
-			Name: 'VFL Waiblingen',
-			adress: 'Beinsteinerstr. 160',
-			halle: 'Rundsporthalle'
-		},
-		{
-			UUID: 123346,
-			Name: 'TSV Schmiden',
-			adress: 'Fellbacher Straße 45',
-			halle: 'Sporthalle am Schulzentrum'
-		},
-		{ UUID: 123347, Name: 'TV Oeffingen', adress: 'Kellerstraße 45', halle: 'Sporthalle' },
-		{
-			UUID: 123347,
-			Name: 'HSC Schmoeff',
-			adress: 'Fellbacher Straße 45',
-			halle: 'Sporthalle am Schulzentrum'
-		},
-		{
-			UUID: 123347,
-			Name: 'TV Bittenfeld',
-			adress: 'Bittenfelderstraße 120',
-			halle: 'Ballspielhalle'
-		}
-	];
+	const sourceData = Clubs;
 	const gyms = Gym;
 	const teams = [
 		{ UUID: 123456, gender: 'g', age_group: 'E', Coach: 'Felix Link', number: 1 },
