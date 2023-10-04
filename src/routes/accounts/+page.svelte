@@ -2,10 +2,10 @@
 	import { Table } from '@skeletonlabs/skeleton';
 	import type { TableSource } from '@skeletonlabs/skeleton';
 	import { tableMapperValues } from '@skeletonlabs/skeleton';
-	import { TabGroup, Tab, TabAnchor } from '@skeletonlabs/skeleton';
-	import Users from "../../lib/data/User.json"
+	import { TabGroup, Tab } from '@skeletonlabs/skeleton';
+	import Users from '../../lib/data/User.json';
 
-	const sourceData = Users
+	const sourceData = Users;
 	type User = {
 		UUID: string;
 		firstname: string;
@@ -29,7 +29,14 @@
 		// The data visibly shown in your table body UI.
 		body: tableMapperValues(sourceData, ['UUID', 'firstname', 'lastname', 'Verein']),
 		// Optional: The data returned when interactive is enabled and a row is clicked.
-		meta: tableMapperValues(sourceData, ['UUID', 'firstname', 'lastname', 'Verein', 'email', 'role']),
+		meta: tableMapperValues(sourceData, [
+			'UUID',
+			'firstname',
+			'lastname',
+			'Verein',
+			'email',
+			'role'
+		]),
 		// Optional: A list of footer labels.
 		foot: ['', 'Total', '', '<code class="code">' + sourceData.length + '</code>']
 	};
@@ -50,8 +57,8 @@
 </script>
 
 <main class="m-3">
-	<div class="flex flex-row w-screen justify-between ">
-		<h1 class="h2 ">Accounts</h1>
+	<div class="flex flex-row w-screen justify-between">
+		<h1 class="h2">Accounts</h1>
 		<a href="/addaccount"><button class="btn variant-filled-primary mr-[5vw]">Add New</button></a>
 	</div>
 	<div class="flex flex-row items-top h-[60vh]">
@@ -59,7 +66,6 @@
 			<div class="flex flex-row justify-between mb-1">
 				<h3 class="h3">List of all User Accounts</h3>
 				<input class="input w-1/2 h-1/6" type="search" placeholder="Search..." />
-				
 			</div>
 			<Table interactive={true} on:selected={test} source={tableSimple} />
 		</div>
@@ -75,53 +81,52 @@
 					<svelte:fragment slot="panel">
 						{#if tabSet === 0}
 							<div class="grid grid-cols-2 grid-rows-3 gap-4">
-								
-									<label class="label col-start-1 row-start-1">
-										<span>UUID:</span>
-										<input
-											bind:value={selecet_User.UUID}
-											class="input"
-											type="text"
-											placeholder="Input"
-											disabled
-										/>
-									</label>
-									<label class="label col-start-1 row-start-2">
-										<span>Firstname:</span>
-										<input
-											bind:value={selecet_User.firstname}
-											class="input"
-											type="text"
-											placeholder="Input"
-										/>
-									</label>
-									<label class="label col-start-2 row-start-2">
-										<span>Lastname:</span>
-										<input
-											bind:value={selecet_User.lastname}
-											class="input"
-											type="text"
-											placeholder="Input"
-										/>
-									</label>
-									<label class="label col-start-1 row-start-3">
-										<span>Email:</span>
-										<input
-											bind:value={selecet_User.email}
-											class="input"
-											type="text"
-											placeholder="Input"
-										/>
-									</label>
-									<label class="label col-start-2 row-start-3">
-										<span>Role:</span>
-										<input
-											bind:value={selecet_User.role}
-											class="input"
-											type="text"
-											placeholder="Input"
-										/>
-									</label>
+								<label class="label col-start-1 row-start-1">
+									<span>UUID:</span>
+									<input
+										bind:value={selecet_User.UUID}
+										class="input"
+										type="text"
+										placeholder="Input"
+										disabled
+									/>
+								</label>
+								<label class="label col-start-1 row-start-2">
+									<span>Firstname:</span>
+									<input
+										bind:value={selecet_User.firstname}
+										class="input"
+										type="text"
+										placeholder="Input"
+									/>
+								</label>
+								<label class="label col-start-2 row-start-2">
+									<span>Lastname:</span>
+									<input
+										bind:value={selecet_User.lastname}
+										class="input"
+										type="text"
+										placeholder="Input"
+									/>
+								</label>
+								<label class="label col-start-1 row-start-3">
+									<span>Email:</span>
+									<input
+										bind:value={selecet_User.email}
+										class="input"
+										type="text"
+										placeholder="Input"
+									/>
+								</label>
+								<label class="label col-start-2 row-start-3">
+									<span>Role:</span>
+									<input
+										bind:value={selecet_User.role}
+										class="input"
+										type="text"
+										placeholder="Input"
+									/>
+								</label>
 							</div>
 						{:else if tabSet === 1}
 							<div class="flex flex-col">
@@ -162,12 +167,11 @@
 				</TabGroup>
 			</div>
 			{#if selecet_User.UUID != ''}
-			<button
-			class="float-right btn variant-filled"
-			on:click={() => alert('Wurde Erfolgreich gespeichert!')}>Save</button
-		>
+				<button
+					class="float-right btn variant-filled"
+					on:click={() => alert('Wurde Erfolgreich gespeichert!')}>Save</button
+				>
 			{/if}
-
 		</div>
 	</div>
 </main>

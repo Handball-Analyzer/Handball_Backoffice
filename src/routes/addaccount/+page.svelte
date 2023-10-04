@@ -1,15 +1,15 @@
 <script lang="ts">
 </script>
 
-<main class="flex items-center ml-[35vw]  justify-start float-none w-[30vw] h-[90vh]">
+<main class="flex items-center ml-[35vw] justify-start float-none w-[30vw] h-[90vh]">
 	<div class="card p-2">
 		<form>
 			<h1 class="h3">Add Account</h1>
-            <label>
+			<label>
 				<span>Firstname</span>
 				<input class="input" type="text" placeholder="Max Mustermann" />
 			</label>
-            <label>
+			<label>
 				<span>Lastname</span>
 				<input class="input" type="text" placeholder="Max Mustermann" />
 			</label>
@@ -24,14 +24,13 @@
 			<label>
 				<span>Club</span>
 				<select name="Club" id="Club" class="select">
-                    <option value="--">-- Optionen --</option>
-                    <option value="TSV Schmiden">TSV Schmiden</option>
-                    <option value="TSV Schmiden">VFL Waiblingen</option>
-                    <option value="TSV Schmiden">HSC Schmoeff</option>
-                    <option value="TSV Schmiden">TV Oeffingen</option>
-                    <option value="TSV Schmiden">HC Schmoeff</option>
-
-                </select>
+					<option value="--">-- Optionen --</option>
+					<option value="TSV Schmiden">TSV Schmiden</option>
+					<option value="TSV Schmiden">VFL Waiblingen</option>
+					<option value="TSV Schmiden">HSC Schmoeff</option>
+					<option value="TSV Schmiden">TV Oeffingen</option>
+					<option value="TSV Schmiden">HC Schmoeff</option>
+				</select>
 			</label>
 			<button class="btn variant-filled-primary float-right mt-3" type="submit">Send</button>
 		</form>

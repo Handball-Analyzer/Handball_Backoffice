@@ -2,8 +2,8 @@
 	import { Table } from '@skeletonlabs/skeleton';
 	import type { TableSource } from '@skeletonlabs/skeleton';
 	import { tableMapperValues } from '@skeletonlabs/skeleton';
-	import { TabGroup, Tab, TabAnchor } from '@skeletonlabs/skeleton';
-	import Gym from "../../lib/data/Gym.json"
+	import { TabGroup, Tab } from '@skeletonlabs/skeleton';
+	import Gym from '../../lib/data/Gym.json';
 
 	const sourceData = [
 		{
@@ -80,8 +80,8 @@
 </script>
 
 <main class="m-3">
-	<div class="flex flex-row w-screen justify-between ">
-		<h1 class="h2 ">Accounts</h1>
+	<div class="flex flex-row w-screen justify-between">
+		<h1 class="h2">Accounts</h1>
 		<a href="/addclub"><button class="btn variant-filled-primary mr-[5vw]">Add New</button></a>
 	</div>
 	<div class="flex flex-row items-top h-[60vh]">
@@ -90,7 +90,12 @@
 				<h3 class="h3">List of all Clubs</h3>
 				<input class="input w-1/2 h-1/6" type="search" placeholder="Search..." />
 			</div>
-			<Table class="h-[54vh] overflow-scroll" interactive={true} on:selected={test} source={tableSimple} />
+			<Table
+				class="h-[54vh] overflow-scroll"
+				interactive={true}
+				on:selected={test}
+				source={tableSimple}
+			/>
 		</div>
 		<div class="w-1/2 h-full m-2">
 			<div class="h-full">
@@ -187,12 +192,11 @@
 				</TabGroup>
 			</div>
 			{#if selecet_Club.UUID != ''}
-			<button
-			class="float-right btn variant-filled"
-			on:click={() => alert('Wurde Erfolgreich gespeichert!'+selecet_Club.UUID)}>Save</button
-		>
+				<button
+					class="float-right btn variant-filled"
+					on:click={() => alert('Wurde Erfolgreich gespeichert!' + selecet_Club.UUID)}>Save</button
+				>
 			{/if}
-			
 		</div>
 	</div>
 </main>
