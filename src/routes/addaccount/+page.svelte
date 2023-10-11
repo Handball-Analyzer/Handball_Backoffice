@@ -1,6 +1,8 @@
 <script lang="ts">
-	import Clubs from '../../lib/data/Club.json'
-	
+	import type { PageData, ActionData } from './$types';
+	export let data: PageData;
+
+	const optionsClubnames = data.allClubNames
 
 </script>
 
@@ -28,10 +30,9 @@
 				<span>Club</span>
 				<select name="Club" id="Club" class="select">
 					<option value="--">-- Optionen --</option>
-					{#each Clubs as club}
-						<option value={club.UUID}>{club.Name}</option>
+					{#each optionsClubnames as club}
+						<option value={club.id}>{club.name}</option>
 					{/each}
-					
 					
 				</select>
 			</label>

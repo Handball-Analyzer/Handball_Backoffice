@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { AppBar } from '@skeletonlabs/skeleton';
+	import { signOut } from "@auth/sveltekit/client"
 </script>
 
 <AppBar gridColumns="grid-cols-3" slotDefault="place-self-center" slotTrail="place-content-end">
@@ -17,7 +18,7 @@
 		<a hidden href="/statistics">Statistics</a>
 		<a href="/messages">Messages</a>
 	</div>
-	<svelte:fragment slot="trail"><button class="btn variant-filled">Logout</button></svelte:fragment>
+	<svelte:fragment slot="trail"><button on:click={() => signOut()} class="btn variant-filled">Logout</button></svelte:fragment>
 </AppBar>
 
 <style lang="postcss">
