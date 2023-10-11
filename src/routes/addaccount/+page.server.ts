@@ -14,7 +14,6 @@ if (!session?.user) throw redirect(303, '/auth/signin');
 
     const res = await  fetch("http://localhost:8080/backoffice/allClubNames");
     resAllClubNames = await res.json();
-    console.log(resAllClubNames)
 
 
     resAllClubNames.forEach((element: any) => {

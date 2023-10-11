@@ -19,6 +19,7 @@ export const handle = SvelteKitAuth(async (event) => {
         async authorize(credentials) {
             let response_user: any;
             let jsonUser:any 
+            let result:boolean = false
             const req_url = 'http://localhost:8080/backoffice/login/'+credentials.email
             try {
                 response_user = await fetch(req_url)
@@ -27,10 +28,12 @@ export const handle = SvelteKitAuth(async (event) => {
                 redirect(303, '/auth/signin');
             }
             
-            const result = true;
-            console.log(jsonUser)
             
-            if (result && jsonUser.active == true) {
+            if(credentials.password == jsonUser.password){
+                result = true
+            }
+            
+            if (result && jsonUser.active == true && jsonUser.role == "Admin") {
                 return {
                     id: jsonUser.id,
                     email: jsonUser.email,
