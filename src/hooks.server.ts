@@ -20,7 +20,7 @@ export const handle = SvelteKitAuth(async (event) => {
             let response_user: any;
             let jsonUser:any 
             let result:boolean = false
-            const req_url = 'http://localhost:8080/backoffice/login/'+credentials.email
+            const req_url = 'http://localhost:8080/backoffice/user/login/'+credentials.email
             try {
                 response_user = await fetch(req_url)
                 jsonUser = await response_user.json()
@@ -37,12 +37,7 @@ export const handle = SvelteKitAuth(async (event) => {
                 return {
                     id: jsonUser.id,
                     email: jsonUser.email,
-                    firstname: jsonUser.firstname,
-                    lastname: jsonUser.lastname,
-                    gender: jsonUser.gender,
-                    role: jsonUser.role,
-                    club_id: jsonUser.club_id,
-                    settings_id: jsonUser.settings_id
+
                 } as User;
             } else {
                 return null;

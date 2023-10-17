@@ -9,7 +9,7 @@ export const load = (async ({locals}) => {
 	if (!session?.user) throw redirect(303, '/auth/signin');
 
     var allUserData:User[] = [];
-    const res = await  fetch("http://localhost:8080/backoffice/allUser");
+    const res = await  fetch("http://localhost:8080/backoffice/user/getAll");
     allUserData = await res.json()
     console.log(res)
     console.log(allUserData)

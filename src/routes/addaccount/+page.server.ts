@@ -12,7 +12,7 @@ if (!session?.user) throw redirect(303, '/auth/signin');
     let resAllClubNames = [];
     let allClubNames:ClubName[] = [];
 
-    const res = await  fetch("http://localhost:8080/backoffice/allClubNames");
+    const res = await  fetch("http://localhost:8080/backoffice/club/getAll");
     resAllClubNames = await res.json();
 
 
