@@ -4,10 +4,9 @@
 	import { tableMapperValues } from '@skeletonlabs/skeleton';
 	import { TabGroup, Tab } from '@skeletonlabs/skeleton';
 	import Gym from '../../lib/data/Gym.json';
-	import Clubs from '../../lib/data/Club.json'
+	import type { Club } from '$lib/types/Club';
+	import type { PageData } from './$types';
 
-	const sourceData = Clubs;
-	const gyms = Gym;
 	const teams = [
 		{ UUID: 123456, gender: 'g', age_group: 'E', Coach: 'Felix Link', number: 1 },
 		{ UUID: 123456, gender: 'm', age_group: 'D', Coach: 'Felix Link', number: 1 },
@@ -17,37 +16,40 @@
 		{ UUID: 123456, gender: 'm', age_group: 'A', Coach: 'Felix Link', number: 2 },
 		{ UUID: 123456, gender: 'w', age_group: 'Z', Coach: 'Felix Link', number: 2 }
 	];
-	type Club = {
-		UUID: string;
-		Name: string;
-		adress: string;
-		halle: string;
-	};
-	let selecet_Club: Club = {
-		UUID: '',
-		Name: '',
-		adress: '',
-		halle: ''
-	};
+
+
+	export let data:PageData;
+	const clubData:any = data.clubData;
+	const gyms = Gym;
+	let selecet_Club:Club = {
+    id: null,
+    name: '',
+    plz: 0,
+    location: '',
+    street: '',
+    housenumber: 0
+}
 
 	const tableSimple: TableSource = {
 		// A list of heading labels.
-		head: ['UUID', 'Name', 'adress', 'halle'],
+		head: ['UUID', 'Name'],
 		// The data visibly shown in your table body UI.
-		body: tableMapperValues(sourceData, ['UUID', 'Name', 'adress', 'halle']),
+		body: tableMapperValues(clubData, ['id', 'name']),
 		// Optional: The data returned when interactive is enabled and a row is clicked.
-		meta: tableMapperValues(sourceData, ['UUID', 'Name', 'adress', 'halle']),
+		meta: tableMapperValues(clubData, ['id', 'name', 'plz', 'location','street','housenumber']),
 		// Optional: A list of footer labels.
-		foot: ['', 'Total', '', '<code class="code">' + sourceData.length + '</code>']
+		foot: [ 'Total', '<code class="code">' + clubData.length + '</code>']
 	};
 
 	function test(event: { detail: any }) {
 		let seleceted_row = event.detail;
 		selecet_Club = {
-			UUID: seleceted_row[0],
-			Name: seleceted_row[1],
-			adress: seleceted_row[2],
-			halle: seleceted_row[3]
+			id: seleceted_row[0],
+			name: seleceted_row[1],
+			plz: seleceted_row[2],
+			location: seleceted_row[3],
+			street:seleceted_row[4],
+			housenumber: seleceted_row[5]
 		};
 	}
 
@@ -90,7 +92,7 @@
 									<label class="label w-1/2">
 										<span>UUID:</span>
 										<input
-											bind:value={selecet_Club.UUID}
+											bind:value={selecet_Club.id}
 											class="input"
 											type="text"
 											placeholder="Input"
@@ -102,7 +104,7 @@
 									<label class="label">
 										<span>Name:</span>
 										<input
-											bind:value={selecet_Club.Name}
+											bind:value={selecet_Club.name}
 											class="input"
 											type="text"
 											placeholder="Input"
@@ -111,7 +113,7 @@
 									<label class="label ml-[3vw]">
 										<span>Adress:</span>
 										<input
-											bind:value={selecet_Club.adress}
+											bind:value={selecet_Club.location}
 											class="input"
 											type="text"
 											placeholder="Input"
@@ -166,10 +168,10 @@
 					</svelte:fragment>
 				</TabGroup>
 			</div>
-			{#if selecet_Club.UUID != ''}
+			{#if selecet_Club.id != null}
 				<button
 					class="float-right btn variant-filled"
-					on:click={() => alert('Wurde Erfolgreich gespeichert!' + selecet_Club.UUID)}>Save</button
+					on:click={() => alert('Wurde Erfolgreich gespeichert!' + selecet_Club.id)}>Save</button
 				>
 			{/if}
 		</div>

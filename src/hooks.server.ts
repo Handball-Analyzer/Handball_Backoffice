@@ -6,8 +6,10 @@ import { redirect } from "@sveltejs/kit";
 
 
 
+
 import type { Handle } from "@sveltejs/kit";
-import type { User } from "$lib/types/User";
+import type { User } from "@auth/core/types";
+
 
 export const handle = SvelteKitAuth(async (event) => {
   const authOptions = {
@@ -34,9 +36,11 @@ export const handle = SvelteKitAuth(async (event) => {
             }
             
             if (result && jsonUser.active == true && jsonUser.role == "Admin") {
+                const userName = jsonUser.firstname+ " " + jsonUser.lastname 
                 return {
                     id: jsonUser.id,
                     email: jsonUser.email,
+                    name: userName
 
                 } as User;
             } else {

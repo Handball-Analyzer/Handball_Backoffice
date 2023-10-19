@@ -5,6 +5,7 @@
 	import { TabGroup, Tab } from '@skeletonlabs/skeleton';
 	import type { PageData, ActionData } from './$types';
 	import type { User } from '$lib/types/User';
+	import { requestDisableAccount, requestEnableAccount } from './requests';
 	export let data: PageData;
 
 	let allUserData = data.allUserData;
@@ -13,20 +14,22 @@
 
 	const tableSimple: TableSource = {
 		// A list of heading labels.
-		head: ['UUID', 'Firstname', 'Lastname', 'Verein'],
+		head: ['UUID', 'Firstname', 'Lastname','Status'],
 		// The data visibly shown in your table body UI.
-		body: tableMapperValues(allUserData, ['id', 'firstname', 'lastname', 'club_id']),
+		body: tableMapperValues(allUserData, ['id', 'firstname', 'lastname', 'active']),
 		// Optional: The data returned when interactive is enabled and a row is clicked.
 		meta: tableMapperValues(allUserData, [
 			'id',
 			'firstname',
 			'lastname',
-			'club_id',
 			'email',
-			'role'
+			'gender',
+			'password',
+			'role',
+			'active'
 		]),
 		// Optional: A list of footer labels.
-		foot: ['', 'Total', '', '<code class="code">' + allUserData.length + '</code>']
+		foot: [ 'Total', '', '<code class="code">' + allUserData.length + '</code>']
 	};
 
 	function test(event: { detail: any }) {
@@ -35,24 +38,30 @@
 			id: seleceted_row[0],
 			firstname: seleceted_row[1],
 			lastname: seleceted_row[2],
-			club_id: seleceted_row[3],
-			email: seleceted_row[4],
-			role: seleceted_row[5],
-			gender: '',
-			password: '',
-			settings_id: 0
+			email: seleceted_row[3],
+			gender: seleceted_row[4],
+			password: seleceted_row[5],
+			role: seleceted_row[6],
+			active: seleceted_row[7]
 		};
 	}
-
+	async function enableAccount(){
+		await requestEnableAccount(selecet_User.id)
+		await window.location.reload()
+	}
+	async function disableAccount(){
+		await requestDisableAccount(selecet_User.id)
+		await window.location.reload()
+	}
 	let tabSet: number = 0;
 </script>
 
-{#if allUserData.length >= 1}
-	<main class="m-3">
-		<div class="flex flex-row w-screen justify-between">
-			<h1 class="h2">Accounts</h1>
-			<a href="/addaccount"><button class="btn variant-filled-primary mr-[5vw]">Add New</button></a>
-		</div>
+<main class="m-3">
+	<div class="flex flex-row w-screen justify-between">
+		<h1 class="h2">Accounts</h1>
+		<a href="/addaccount"><button class="btn variant-filled-primary mr-[5vw]">Add New</button></a>
+	</div>
+	{#if allUserData.length >= 1}
 		<div class="flex flex-row items-top h-[60vh]">
 			<div class="w-1/2 h-full m-2">
 				<div class="flex flex-row justify-between mb-1">
@@ -65,7 +74,14 @@
 			{#if selecet_User != undefined}
 				<div class="w-1/2 h-full m-2">
 					<div class="h-full">
-						<h1 class="h3">User Detail View</h1>
+						<div class="flex flex-row">
+							<h1 class="h3 mr-2">{selecet_User.lastname}, {selecet_User.firstname}</h1>
+							{#if  selecet_User.active == true}
+							<span class="chip variant-ghost-success">Active</span>
+							{:else if selecet_User.active != true}
+							<span class="chip variant-ghost-error">Disabled</span>
+							{/if}
+						</div>
 						<TabGroup class="w-[40vw]">
 							<Tab bind:group={tabSet} name="tab1" value={0}>Personal</Tab>
 							<Tab bind:group={tabSet} name="tab2" value={1}>Club/Teams</Tab>
@@ -128,7 +144,7 @@
 											<label class="label">
 												<span>Club:</span>
 												<input
-													bind:value={selecet_User.club_id}
+													bind:value={selecet_User.email}
 													class="input"
 													type="text"
 													placeholder="Input"
@@ -149,10 +165,19 @@
 									<div class="flex flex-col">
 										<div class="flex flex-row">
 											<label class="label">
-												<span>Disable Account:</span>
-												<button on:click={() => alert('Are you sure?')} class="btn variant-filled"
-													>disactivate Account</button
-												>
+												{#if selecet_User.active == true}
+													<span>Disable Account:</span>
+													<button
+														on:click={disableAccount}
+														class="btn variant-filled">Disable account</button
+													>
+												{:else}
+													<span>Enable Account:</span>
+													<button
+														on:click={enableAccount}
+														class="btn variant-filled">Enable Account</button
+													>
+												{/if}
 											</label>
 										</div>
 									</div>
@@ -169,8 +194,8 @@
 				</div>
 			{/if}
 		</div>
-	</main>
-{/if}
+	{/if}
+</main>
 
 <style>
 </style>

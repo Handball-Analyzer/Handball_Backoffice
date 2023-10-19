@@ -11,8 +11,6 @@ export const load = (async ({locals}) => {
     var allUserData:User[] = [];
     const res = await  fetch("http://localhost:8080/backoffice/user/getAll");
     allUserData = await res.json()
-    console.log(res)
-    console.log(allUserData)
 
 	return {
         allUserData: allUserData
