@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { AppBar } from '@skeletonlabs/skeleton';
 	import { signOut } from "@auth/sveltekit/client"
+
 	import { page } from '$app/stores';
+	import { writable } from 'svelte/store';
 </script>
 
 <AppBar gridColumns="grid-cols-3" slotDefault="place-self-center" slotTrail="place-content-end">
@@ -17,7 +19,8 @@
 		<a href="/accounts">Customer</a>
 		<a href="/club">Club</a>
 		<a hidden href="/statistics">Statistics</a>
-		<a href="/messages">Messages</a>
+		<a href="/support">Support</a>
+		<a href="/contactrequest">Use requst</a>
 	</div>
 	<svelte:fragment slot="trail">
 		<p>{$page.data.session?.user?.name}</p>
