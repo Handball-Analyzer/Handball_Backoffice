@@ -17,18 +17,17 @@
 		{ UUID: 123456, gender: 'w', age_group: 'Z', Coach: 'Felix Link', number: 2 }
 	];
 
-
-	export let data:PageData;
-	const clubData:any = data.clubData;
+	export let data: PageData;
+	const clubData: any = data.clubData;
 	const gyms = Gym;
-	let selecet_Club:Club = {
-    id: null,
-    name: '',
-    plz: 0,
-    location: '',
-    street: '',
-    housenumber: 0
-}
+	let selecet_Club: Club = {
+		id: null,
+		name: '',
+		plz: 0,
+		location: '',
+		street: '',
+		housenumber: 0
+	};
 
 	const tableSimple: TableSource = {
 		// A list of heading labels.
@@ -36,9 +35,9 @@
 		// The data visibly shown in your table body UI.
 		body: tableMapperValues(clubData, ['id', 'name']),
 		// Optional: The data returned when interactive is enabled and a row is clicked.
-		meta: tableMapperValues(clubData, ['id', 'name', 'plz', 'location','street','housenumber']),
+		meta: tableMapperValues(clubData, ['id', 'name', 'plz', 'location', 'street', 'housenumber']),
 		// Optional: A list of footer labels.
-		foot: [ 'Total', '<code class="code">' + clubData.length + '</code>']
+		foot: ['Total', '<code class="code">' + clubData.length + '</code>']
 	};
 
 	function test(event: { detail: any }) {
@@ -48,7 +47,7 @@
 			name: seleceted_row[1],
 			plz: seleceted_row[2],
 			location: seleceted_row[3],
-			street:seleceted_row[4],
+			street: seleceted_row[4],
 			housenumber: seleceted_row[5]
 		};
 	}

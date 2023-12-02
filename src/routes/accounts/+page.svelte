@@ -14,7 +14,7 @@
 
 	const tableSimple: TableSource = {
 		// A list of heading labels.
-		head: ['UUID', 'Firstname', 'Lastname','Status'],
+		head: ['UUID', 'Firstname', 'Lastname', 'Status'],
 		// The data visibly shown in your table body UI.
 		body: tableMapperValues(allUserData, ['id', 'firstname', 'lastname', 'active']),
 		// Optional: The data returned when interactive is enabled and a row is clicked.
@@ -29,7 +29,7 @@
 			'active'
 		]),
 		// Optional: A list of footer labels.
-		foot: [ 'Total', '', '<code class="code">' + allUserData.length + '</code>']
+		foot: ['Total', '', '<code class="code">' + allUserData.length + '</code>']
 	};
 
 	function test(event: { detail: any }) {
@@ -45,13 +45,13 @@
 			active: seleceted_row[7]
 		};
 	}
-	async function enableAccount(){
-		await requestEnableAccount(selecet_User.id)
-		await window.location.reload()
+	async function enableAccount() {
+		await requestEnableAccount(selecet_User.id);
+		await window.location.reload();
 	}
-	async function disableAccount(){
-		await requestDisableAccount(selecet_User.id)
-		await window.location.reload()
+	async function disableAccount() {
+		await requestDisableAccount(selecet_User.id);
+		await window.location.reload();
 	}
 	let tabSet: number = 0;
 </script>
@@ -76,10 +76,10 @@
 					<div class="h-full">
 						<div class="flex flex-row">
 							<h1 class="h3 mr-2">{selecet_User.lastname}, {selecet_User.firstname}</h1>
-							{#if  selecet_User.active == true}
-							<span class="chip variant-ghost-success">Active</span>
+							{#if selecet_User.active == true}
+								<span class="chip variant-ghost-success">Active</span>
 							{:else if selecet_User.active != true}
-							<span class="chip variant-ghost-error">Disabled</span>
+								<span class="chip variant-ghost-error">Disabled</span>
 							{/if}
 						</div>
 						<TabGroup class="w-[40vw]">
@@ -167,15 +167,13 @@
 											<label class="label">
 												{#if selecet_User.active == true}
 													<span>Disable Account:</span>
-													<button
-														on:click={disableAccount}
-														class="btn variant-filled">Disable account</button
+													<button on:click={disableAccount} class="btn variant-filled"
+														>Disable account</button
 													>
 												{:else}
 													<span>Enable Account:</span>
-													<button
-														on:click={enableAccount}
-														class="btn variant-filled">Enable Account</button
+													<button on:click={enableAccount} class="btn variant-filled"
+														>Enable Account</button
 													>
 												{/if}
 											</label>

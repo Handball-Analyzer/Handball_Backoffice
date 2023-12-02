@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { AppBar } from '@skeletonlabs/skeleton';
-	import { signOut } from "@auth/sveltekit/client"
+	import { signOut } from '@auth/sveltekit/client';
 
 	import { page } from '$app/stores';
 	import { writable } from 'svelte/store';

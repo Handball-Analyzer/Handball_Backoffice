@@ -2,8 +2,7 @@
 	import type { PageData, ActionData } from './$types';
 	export let data: PageData;
 
-	const optionsClubnames = data.allClubNames
-
+	const optionsClubnames = data.allClubNames;
 </script>
 
 <main class="flex items-center ml-[35vw] justify-start float-none w-[30vw] h-[90vh]">
@@ -37,7 +36,6 @@
 					{#each optionsClubnames as club}
 						<option value={club.id}>{club.name}</option>
 					{/each}
-					
 				</select>
 			</label>
 			<button class="btn variant-filled-primary float-right mt-3" type="submit">Send</button>
