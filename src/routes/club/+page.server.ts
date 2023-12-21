@@ -1,11 +1,9 @@
-import { redirect } from '@sveltejs/kit';
+
 import type { PageServerLoad } from './$types';
 import type { Club } from '$lib/types/Club';
 
 // Load function
-export const load = (async ({ locals }) => {
-	const session = await locals.getSession();
-	if (!session?.user) throw redirect(303, '/auth/signin');
+export const load = (async () => {
 
 	const respone = await fetch('http://localhost:8080/backoffice/club/getAll');
 	const statuscode = respone.status;

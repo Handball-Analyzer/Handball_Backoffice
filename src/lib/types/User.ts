@@ -8,7 +8,7 @@ export type User = {
 	password: string;
 	email: string;
 	role: string;
-	active: Boolean;
+	active: boolean;
 };
 
 export type createUserDto = {
@@ -19,6 +19,6 @@ export type createUserDto = {
 	password: string;
 	email: string;
 	role: string;
-	active: Boolean;
-	club_id: String | null;
+	active: boolean;
+	club_id: string | null;
 };

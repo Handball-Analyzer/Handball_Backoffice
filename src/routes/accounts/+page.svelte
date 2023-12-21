@@ -78,7 +78,7 @@
 							<h1 class="h3 mr-2">{selecet_User.lastname}, {selecet_User.firstname}</h1>
 							{#if selecet_User.active == true}
 								<span class="chip variant-ghost-success">Active</span>
-							{:else if selecet_User.active != true}
+							{:else if !selecet_User.active}
 								<span class="chip variant-ghost-error">Disabled</span>
 							{/if}
 						</div>
