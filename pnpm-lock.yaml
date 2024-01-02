@@ -20,6 +20,9 @@ dependencies:
   svelte-icons:
     specifier: ^2.1.0
     version: 2.1.0
+  svelte-local-storage-store:
+    specifier: ^0.6.4
+    version: 0.6.4(svelte@4.2.0)
 
 devDependencies:
   '@playwright/test':
@@ -2408,6 +2411,15 @@ packages:
 
   /svelte-icons@2.1.0:
     resolution: {integrity: sha512-rHPQjweEc9fGSnvM0/4gA3pDHwyZyYsC5KhttCZRhSMJfLttJST5Uq0B16Czhw+HQ+HbSOk8kLigMlPs7gZtfg==}
+    dev: false
+
+  /svelte-local-storage-store@0.6.4(svelte@4.2.0):
+    resolution: {integrity: sha512-45WoY2vSGPQM1sIQJ9jTkPPj20hYeqm+af6mUGRFSPP5WglZf36YYoZqwmZZ8Dt/2SU8lem+BTA8/Z/8TkqNLg==}
+    engines: {node: '>=0.14'}
+    peerDependencies:
+      svelte: ^3.48.0 || >4.0.0
+    dependencies:
+      svelte: 4.2.0
     dev: false
 
   /svelte-preprocess@5.0.4(postcss@8.4.29)(svelte@4.2.0)(typescript@5.2.2):

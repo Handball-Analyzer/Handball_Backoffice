@@ -2,23 +2,18 @@ import type { UUID } from 'crypto';
 
 export type User = {
 	id: UUID;
+	email: string;
 	firstname: string;
 	lastname: string;
 	gender: string | null;
-	password: string;
-	email: string;
 	role: string;
 	active: boolean;
 };
 
 export type createUserDto = {
-	id: null;
-	firstName: string;
-	lastName: string;
-	gender: null;
+	firstname: string;
+	lastname: string;
 	password: string;
 	email: string;
-	role: string;
-	active: boolean;
-	club_id: string | null;
+	clubId: UUID | null;
 };

@@ -47,6 +47,7 @@
 		"@auth/sveltekit": "^0.3.9",
 		"@floating-ui/dom": "1.5.3",
 		"axios": "^1.5.1",
-		"svelte-icons": "^2.1.0"
+		"svelte-icons": "^2.1.0",
+		"svelte-local-storage-store": "^0.6.4"
 	}
 }

@@ -1,14 +1,36 @@
 <script lang="ts">
 	import { Table } from '@skeletonlabs/skeleton';
-	import type { TableSource } from '@skeletonlabs/skeleton';
+	import { Toast, type TableSource } from '@skeletonlabs/skeleton';
 	import { tableMapperValues } from '@skeletonlabs/skeleton';
 	import { TabGroup, Tab } from '@skeletonlabs/skeleton';
-	import type { PageData, ActionData } from './$types';
 	import type { User } from '$lib/types/User';
-	import { requestDisableAccount, requestEnableAccount } from './requests';
-	export let data: PageData;
+	import { get } from 'svelte/store';
+	import { token } from '$lib/Store';
+	import { onMount } from 'svelte';
+	import { changeActiveUser, loadData } from './request';
+	import { initializeStores } from '@skeletonlabs/skeleton';
+	import { getToastStore } from '@skeletonlabs/skeleton';
+	import { createToast } from '$lib/Toast';
 
-	let allUserData = data.allUserData;
+	initializeStores();
+	const toastStore = getToastStore();
+	let allUserData: User[] = [];
+
+	onMount(async () => {
+		allUserData = await loadData(get(token));
+		console.log(allUserData);
+		tableSimple.body = tableMapperValues(allUserData, ['id', 'firstname', 'lastname', 'active']);
+		tableSimple.meta = tableMapperValues(allUserData, [
+			'id',
+			'firstname',
+			'lastname',
+			'email',
+			'gender',
+			'role',
+			'active'
+		])
+		tableSimple.foot =  ['Total', '', '<code class="code">' + allUserData.length + '</code>']
+	});
 
 	let selecet_User: User;
 
@@ -17,22 +39,10 @@
 		head: ['UUID', 'Firstname', 'Lastname', 'Status'],
 		// The data visibly shown in your table body UI.
 		body: tableMapperValues(allUserData, ['id', 'firstname', 'lastname', 'active']),
-		// Optional: The data returned when interactive is enabled and a row is clicked.
-		meta: tableMapperValues(allUserData, [
-			'id',
-			'firstname',
-			'lastname',
-			'email',
-			'gender',
-			'password',
-			'role',
-			'active'
-		]),
-		// Optional: A list of footer labels.
-		foot: ['Total', '', '<code class="code">' + allUserData.length + '</code>']
 	};
 
 	function test(event: { detail: any }) {
+		console.log(event.detail);
 		let seleceted_row = event.detail;
 		selecet_User = {
 			id: seleceted_row[0],
@@ -40,22 +50,25 @@
 			lastname: seleceted_row[2],
 			email: seleceted_row[3],
 			gender: seleceted_row[4],
-			password: seleceted_row[5],
-			role: seleceted_row[6],
-			active: seleceted_row[7]
+			role: seleceted_row[5],
+			active: seleceted_row[6]
 		};
 	}
-	async function enableAccount() {
-		await requestEnableAccount(selecet_User.id);
+	async function changeActive() {
+		console.log(selecet_User)
+		const status = await changeActiveUser(selecet_User.id,  get(token));
 		await window.location.reload();
-	}
-	async function disableAccount() {
-		await requestDisableAccount(selecet_User.id);
-		await window.location.reload();
+		if(status == 200) {
+			toastStore.trigger(createToast("User status wurde erfolgreich geändert", "success"))
+		} else {
+			toastStore.trigger(createToast("Error", "error"))
+		}
+		
 	}
 	let tabSet: number = 0;
 </script>
 
+<Toast />
 <main class="m-3">
 	<div class="flex flex-row w-screen justify-between">
 		<h1 class="h2">Accounts</h1>
@@ -76,7 +89,7 @@
 					<div class="h-full">
 						<div class="flex flex-row">
 							<h1 class="h3 mr-2">{selecet_User.lastname}, {selecet_User.firstname}</h1>
-							{#if selecet_User.active == true}
+							{#if selecet_User.active}
 								<span class="chip variant-ghost-success">Active</span>
 							{:else if !selecet_User.active}
 								<span class="chip variant-ghost-error">Disabled</span>
@@ -167,12 +180,12 @@
 											<label class="label">
 												{#if selecet_User.active == true}
 													<span>Disable Account:</span>
-													<button on:click={disableAccount} class="btn variant-filled"
+													<button on:click={changeActive} class="btn variant-filled"
 														>Disable account</button
 													>
 												{:else}
 													<span>Enable Account:</span>
-													<button on:click={enableAccount} class="btn variant-filled"
+													<button on:click={changeActive} class="btn variant-filled"
 														>Enable Account</button
 													>
 												{/if}

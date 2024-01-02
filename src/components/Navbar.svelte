@@ -13,7 +13,7 @@
 		/></svelte:fragment
 	>
 	<div class="p-5 flex flex-row justify-around w-[40vw]">
-		<a href="/">Home</a>
+		<a href="/dashboard">Home</a>
 		<a href="/accounts">Customer</a>
 		<a href="/club">Club</a>
 		<a hidden href="/statistics">Statistics</a>

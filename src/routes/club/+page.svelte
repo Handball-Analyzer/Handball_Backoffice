@@ -5,7 +5,18 @@
 	import { TabGroup, Tab } from '@skeletonlabs/skeleton';
 	import Gym from '../../lib/data/Gym.json';
 	import type { Club } from '$lib/types/Club';
-	import type { PageData } from './$types';
+	import { onMount } from 'svelte';
+	import { getClubs } from '../addclub/request';
+	import { get } from 'svelte/store';
+	import { token } from '$lib/Store';
+
+	let clubData:Club[] = []
+	onMount(async () => {
+		clubData = await getClubs(get(token));
+		tableSimple.body = tableMapperValues(clubData, ['id', 'name']);
+		tableSimple.meta = tableMapperValues(clubData, ['id', 'name', 'plz', 'location', 'street', 'housenumber']);
+		tableSimple.foot = ['Total',  '<code class="code">' + clubData.length + '</code>'];
+	});
 
 	const teams = [
 		{ UUID: 123456, gender: 'g', age_group: 'E', Coach: 'Felix Link', number: 1 },
@@ -16,9 +27,6 @@
 		{ UUID: 123456, gender: 'm', age_group: 'A', Coach: 'Felix Link', number: 2 },
 		{ UUID: 123456, gender: 'w', age_group: 'Z', Coach: 'Felix Link', number: 2 }
 	];
-
-	export let data: PageData;
-	const clubData: any = data.clubData;
 	const gyms = Gym;
 	let selecet_Club: Club = {
 		id: null,
@@ -34,10 +42,6 @@
 		head: ['UUID', 'Name'],
 		// The data visibly shown in your table body UI.
 		body: tableMapperValues(clubData, ['id', 'name']),
-		// Optional: The data returned when interactive is enabled and a row is clicked.
-		meta: tableMapperValues(clubData, ['id', 'name', 'plz', 'location', 'street', 'housenumber']),
-		// Optional: A list of footer labels.
-		foot: ['Total', '<code class="code">' + clubData.length + '</code>']
 	};
 
 	function test(event: { detail: any }) {
@@ -52,12 +56,13 @@
 		};
 	}
 
+
 	let tabSet: number = 0;
 </script>
 
 <main class="m-3">
 	<div class="flex flex-row w-screen justify-between">
-		<h1 class="h2">Accounts</h1>
+		<h1 class="h2">Club</h1>
 		<a href="/addclub"><button class="btn variant-filled-primary mr-[5vw]">Add New</button></a>
 	</div>
 	<div class="flex flex-row items-top h-[60vh]">
