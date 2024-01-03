@@ -1,35 +1,58 @@
 import type { UUID } from 'crypto';
-import type { User } from "$lib/types/User";
+import type { User, UserDetails } from '$lib/types/User';
 import { get } from 'svelte/store';
 import { serverUrl } from '$lib/Store';
 
-export async function loadData(token:string){
-    //const serverURL:string = get(serverUrl);
-	let  allUserData: User[] = [];
-	const res = await fetch(get(serverUrl)+ "/user" , {
+export async function loadData(token: string) {
+	//const serverURL:string = get(serverUrl);
+	let allUserData: User[] = [];
+	const res = await fetch(get(serverUrl) + '/user', {
 		method: 'GET',
 		headers: {
-			'Authorization': 'Bearer ' + token,
+			Authorization: 'Bearer ' + token
 		}
 	});
 	//console.log('res: ', res);
-    console.log('Code: ', res.status);
-    allUserData = await res.json();
-    return allUserData
+	console.log('Code: ', res.status);
+	allUserData = await res.json();
+	return allUserData;
 }
 
-
-
-export async function changeActiveUser(id: UUID, token:string) {
-    
-	const respsone = await fetch(get(serverUrl)+'/user/' + id + '/changeactive', {
+export async function changeActiveUser(id: UUID, token: string) {
+	const respsone = await fetch(get(serverUrl) + '/user/' + id + '/changeactive', {
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/json',
-            'authorization': 'Bearer ' + token
+			authorization: 'Bearer ' + token
 		},
 		cache: 'default'
 	});
-    console.log('Code: ', respsone.status);
-    return respsone.status
+	console.log('Code: ', respsone.status);
+	return respsone.status;
+}
+export async function userDetails(token: string, id: UUID) {
+	const userDetails: UserDetails = { Teams: [], Clubs: [] };
+	const serverURL = get(serverUrl);
+	const responseClubs = await fetch(serverURL + '/userdetails/' + id + '/clubs', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token
+		}
+	});
+	if (responseClubs.status == 200) {
+		userDetails.Clubs = await responseClubs.json();
+	}
+	const responseTeams = await fetch(serverURL + '/userdetails/' + id + '/teams', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token
+		}
+	});
+	if (responseTeams.status == 200) {
+		userDetails.Teams = await responseTeams.json();
+	}
+
+	return userDetails;
 }

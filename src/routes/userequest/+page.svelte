@@ -1,8 +1,7 @@
 <script lang="ts">
-import type { PageData, ActionData } from './$types';
+	import type { PageData, ActionData } from './$types';
 
 	export let data: PageData;
-
 </script>
 
 <main class="p-3">
@@ -20,5 +19,4 @@ import type { PageData, ActionData } from './$types';
 			<!-- ... -->
 		</dl>
 	</div>
-
 </main>

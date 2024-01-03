@@ -1,10 +1,6 @@
-
-import type { PageServerLoad} from './$types';
+import type { PageServerLoad } from './$types';
 
 // Load function
 export const load = (async () => {
-	
-
-	return {
-	};
+	return {};
 }) satisfies PageServerLoad;

@@ -33,6 +33,7 @@
 		}
 	}
 </script>
+
 <Toast />
 <main class="flex items-center ml-[35vw] justify-start float-none w-[30vw] h-[90vh]">
 	<div class="card p-2">
@@ -87,7 +88,11 @@
 					{/each}
 				</select>
 			</label>
-			<button on:click={handleSubmit} class="btn variant-filled-primary float-right mt-3" type="submit">Send</button>
+			<button
+				on:click={handleSubmit}
+				class="btn variant-filled-primary float-right mt-3"
+				type="submit">Send</button
+			>
 		</form>
 	</div>
 </main>

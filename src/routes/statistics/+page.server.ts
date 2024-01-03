@@ -1,4 +1,3 @@
-
 import type { PageServerLoad } from './$types';
 
 // Load function

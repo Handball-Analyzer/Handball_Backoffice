@@ -5,7 +5,7 @@
 	import { get } from 'svelte/store';
 	import { goto } from '$app/navigation';
 	import { createToast } from '$lib/Toast';
-	
+
 	import { getToastStore } from '@skeletonlabs/skeleton';
 	import { initializeStores } from '@skeletonlabs/skeleton';
 	initializeStores();
@@ -26,13 +26,12 @@
 			},
 			body: JSON.stringify(authData)
 		});
-		if
-		(response.ok) {
-			const data:string = await response.text();
+		if (response.ok) {
+			const data: string = await response.text();
 			token.set(data);
 			goto('/dashboard');
 		} else {
-			toastStore.trigger(createToast("Email or password incorrect", "error"))
+			toastStore.trigger(createToast('Email or password incorrect', 'error'));
 			console.log('error');
 		}
 	}

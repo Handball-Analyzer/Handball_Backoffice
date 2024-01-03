@@ -4,18 +4,28 @@
 	import { tableMapperValues } from '@skeletonlabs/skeleton';
 	import { TabGroup, Tab } from '@skeletonlabs/skeleton';
 	import Gym from '../../lib/data/Gym.json';
-	import type { Club } from '$lib/types/Club';
+	import type { Club, ClubDetails } from '$lib/types/Club';
 	import { onMount } from 'svelte';
-	import { getClubs } from '../addclub/request';
 	import { get } from 'svelte/store';
 	import { token } from '$lib/Store';
+	import { getClubs, getDetails } from './request';
 
-	let clubData:Club[] = []
+	let filtervalue: string = '';
+	let clubDetails: ClubDetails = { Teams: [], Gyms: [] };
+
+	let clubData: Club[] = [];
 	onMount(async () => {
 		clubData = await getClubs(get(token));
 		tableSimple.body = tableMapperValues(clubData, ['id', 'name']);
-		tableSimple.meta = tableMapperValues(clubData, ['id', 'name', 'plz', 'location', 'street', 'housenumber']);
-		tableSimple.foot = ['Total',  '<code class="code">' + clubData.length + '</code>'];
+		tableSimple.meta = tableMapperValues(clubData, [
+			'id',
+			'name',
+			'plz',
+			'location',
+			'street',
+			'housenumber'
+		]);
+		tableSimple.foot = ['Total', '<code class="code">' + clubData.length + '</code>'];
 	});
 
 	const teams = [
@@ -28,7 +38,7 @@
 		{ UUID: 123456, gender: 'w', age_group: 'Z', Coach: 'Felix Link', number: 2 }
 	];
 	const gyms = Gym;
-	let selecet_Club: Club = {
+	let selectedClub: Club = {
 		id: null,
 		name: '',
 		plz: 0,
@@ -41,21 +51,29 @@
 		// A list of heading labels.
 		head: ['UUID', 'Name'],
 		// The data visibly shown in your table body UI.
-		body: tableMapperValues(clubData, ['id', 'name']),
+		body: tableMapperValues(clubData, ['id', 'name'])
 	};
 
-	function test(event: { detail: any }) {
-		let seleceted_row = event.detail;
-		selecet_Club = {
-			id: seleceted_row[0],
-			name: seleceted_row[1],
-			plz: seleceted_row[2],
-			location: seleceted_row[3],
-			street: seleceted_row[4],
-			housenumber: seleceted_row[5]
+	async function selectedRow(event: { detail: any }) {
+		clubDetails = await getDetails(get(token), event.detail[0]);
+		let selectedRow = event.detail;
+		selectedClub = {
+			id: selectedRow[0],
+			name: selectedRow[1],
+			plz: selectedRow[2],
+			location: selectedRow[3],
+			street: selectedRow[4],
+			housenumber: selectedRow[5]
 		};
 	}
-
+	function tablefilter() {
+		let filter = filtervalue.toLowerCase();
+		const filterData = clubData.filter((row) => {
+			return row.name.toLowerCase().includes(filter);
+		});
+		tableSimple.body = tableMapperValues(filterData, ['id', 'name']);
+		tableSimple.foot = ['Total', '<code class="code">' + filterData.length + '</code>'];
+	}
 
 	let tabSet: number = 0;
 </script>
@@ -69,12 +87,18 @@
 		<div class="w-1/2 h-full m-2">
 			<div class="flex flex-row justify-between mb-1">
 				<h3 class="h3">List of all Clubs</h3>
-				<input class="input w-1/2 h-1/6" type="search" placeholder="Search..." />
+				<input
+					on:change={tablefilter}
+					bind:value={filtervalue}
+					class="input w-1/2 h-1/6"
+					type="search"
+					placeholder="Search..."
+				/>
 			</div>
 			<Table
 				class="h-[54vh] overflow-scroll"
 				interactive={true}
-				on:selected={test}
+				on:selected={selectedRow}
 				source={tableSimple}
 			/>
 		</div>
@@ -83,11 +107,12 @@
 				<h1 class="h3">Club Detail View</h1>
 				<TabGroup>
 					<Tab bind:group={tabSet} name="tab1" value={0}>General</Tab>
-					<Tab bind:group={tabSet} name="tab2" value={1}>Hallen</Tab>
-					<Tab bind:group={tabSet} name="tab3" value={2}>Ansprechpartner</Tab>
-					<Tab bind:group={tabSet} name="tab3" value={3}>Teams</Tab>
-					<Tab bind:group={tabSet} name="tab3" value={4}>Extensions</Tab>
-					<Tab bind:group={tabSet} name="tab3" value={5}>Abo</Tab>
+					<Tab bind:group={tabSet} name="tab2" value={1}>Adresse</Tab>
+					<Tab bind:group={tabSet} name="tab2" value={2}>Hallen</Tab>
+					<Tab bind:group={tabSet} name="tab3" value={3}>Ansprechpartner</Tab>
+					<Tab bind:group={tabSet} name="tab3" value={4}>Teams</Tab>
+					<Tab bind:group={tabSet} name="tab3" value={5}>Extensions</Tab>
+					<Tab bind:group={tabSet} name="tab3" value={6}>Abo</Tab>
 					<!-- Tab Panels --->
 					<svelte:fragment slot="panel">
 						{#if tabSet === 0}
@@ -96,7 +121,7 @@
 									<label class="label w-1/2">
 										<span>UUID:</span>
 										<input
-											bind:value={selecet_Club.id}
+											bind:value={selectedClub.id}
 											class="input"
 											type="text"
 											placeholder="Input"
@@ -105,19 +130,10 @@
 									</label>
 								</div>
 								<div class="flex flex-row mt-[2vh]">
-									<label class="label">
+									<label class="label w-1/2">
 										<span>Name:</span>
 										<input
-											bind:value={selecet_Club.name}
-											class="input"
-											type="text"
-											placeholder="Input"
-										/>
-									</label>
-									<label class="label ml-[3vw]">
-										<span>Adress:</span>
-										<input
-											bind:value={selecet_Club.location}
+											bind:value={selectedClub.name}
 											class="input"
 											type="text"
 											placeholder="Input"
@@ -126,38 +142,88 @@
 								</div>
 							</div>
 						{:else if tabSet === 1}
-							<dl class="list-dl">
-								{#each gyms as gym}
-									<div>
-										<span class="flex-auto">
-											<dt>{gym.Halle}</dt>
-											<dd>{gym.Adress}</dd>
-										</span>
-									</div>
-								{/each}
-
-								<!-- ... -->
-							</dl>
+							<div class="flex flex-col w-full">
+								<div class="flex flex-row">
+									<label class="label w-2/5">
+										<span>Postleitzahl</span>
+										<input
+											bind:value={selectedClub.plz}
+											class="input"
+											type="text"
+											placeholder="Input"
+											disabled
+										/>
+									</label>
+									<label class="label w-2/5 ml-2">
+										<span>Ort</span>
+										<input
+											bind:value={selectedClub.location}
+											class="input"
+											type="text"
+											placeholder="Input"
+											disabled
+										/>
+									</label>
+								</div>
+								<div class="flex flex-row mt-[2vh]">
+									<label class="label w-2/5">
+										<span>Straße</span>
+										<input
+											bind:value={selectedClub.street}
+											class="input"
+											type="text"
+											placeholder="Input"
+										/>
+									</label>
+									<label class="label w-2/5 ml-2">
+										<span>Hausnummer</span>
+										<input
+											bind:value={selectedClub.housenumber}
+											class="input"
+											type="text"
+											placeholder="Input"
+										/>
+									</label>
+								</div>
+							</div>
 						{:else if tabSet === 2}
-							<p>Tab 2</p>
-						{:else if tabSet === 3}
-							<div class="overflow-scroll h-[47vh]">
+							{#if clubDetails.Gyms.length > 0}
 								<dl class="list-dl">
-									{#each teams as team}
+									{#each clubDetails.Gyms as gym}
 										<div>
 											<span class="flex-auto">
-												<dt>{team.gender + team.age_group + team.number}</dt>
-												<dd>{team.Coach}</dd>
+												<dt>{gym.name}</dt>
+												<dd>{gym.plz} {gym.location}, {gym.street} {gym.housenumber}</dd>
 											</span>
 										</div>
 									{/each}
 
 									<!-- ... -->
 								</dl>
-							</div>
+							{:else}
+								<p>Keine Hallen vorhanden</p>
+							{/if}
+						{:else if tabSet === 3}
+							<p>Tab 2</p>
 						{:else if tabSet === 4}
-							<p>Tab 4</p>
+							{#if clubDetails.Teams.length > 0}
+								<div class="overflow-scroll h-[47vh]">
+									<dl class="list-dl">
+										{#each clubDetails.Teams as team}
+											<div>
+												<span class="flex-auto">
+													<dt>{team.gender + team.agegroup + team.number}</dt>
+												</span>
+											</div>
+										{/each}
+									</dl>
+								</div>
+							{:else}
+								<p>Keine Teams vorhanden</p>
+							{/if}
 						{:else if tabSet === 5}
+							<p>Tab 4</p>
+						{:else if tabSet === 6}
 							<div class="flex flex-col">
 								<div class="flex flex-row">
 									<label class="label">
@@ -172,10 +238,10 @@
 					</svelte:fragment>
 				</TabGroup>
 			</div>
-			{#if selecet_Club.id != null}
+			{#if selectedClub.id != null}
 				<button
 					class="float-right btn variant-filled"
-					on:click={() => alert('Wurde Erfolgreich gespeichert!' + selecet_Club.id)}>Save</button
+					on:click={() => alert('Wurde Erfolgreich gespeichert!' + selectedClub.id)}>Save</button
 				>
 			{/if}
 		</div>

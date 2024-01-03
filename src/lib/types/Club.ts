@@ -1,4 +1,6 @@
 import type { UUID } from 'crypto';
+import type { Team } from './Team';
+import type { Gym } from './Gym';
 
 export type ClubName = {
 	id: UUID;
@@ -18,4 +20,9 @@ export type Club = {
 	location: string;
 	street: string;
 	housenumber: number;
+};
+
+export type ClubDetails = {
+	Teams: Team[];
+	Gyms: Gym[];
 };

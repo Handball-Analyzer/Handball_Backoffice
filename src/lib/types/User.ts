@@ -1,4 +1,6 @@
 import type { UUID } from 'crypto';
+import type { Team } from './Team';
+import type { Club } from './Club';
 
 export type User = {
 	id: UUID;
@@ -16,4 +18,9 @@ export type createUserDto = {
 	password: string;
 	email: string;
 	clubId: UUID | null;
+};
+
+export type UserDetails = {
+	Teams: Team[];
+	Clubs: Club[];
 };
