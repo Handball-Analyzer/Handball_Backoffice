@@ -1,8 +1,7 @@
 <script lang="ts">
-	import { authserverUrl, token } from '$lib/Store';
+	import { token } from '$lib/Store';
 	import type { Auth } from '$lib/types/Auth';
 	import { Toast } from '@skeletonlabs/skeleton';
-	import { get } from 'svelte/store';
 	import { goto } from '$app/navigation';
 	import { createToast } from '$lib/Toast';
 
@@ -17,8 +16,6 @@
 	};
 
 	async function handleSubmit() {
-		console.log(authData);
-		const serverURL = get(authserverUrl);
 		const response = await fetch('http://localhost:8080/auth/v1/backoffice/login', {
 			method: 'POST',
 			headers: {
@@ -32,7 +29,6 @@
 			goto('/dashboard');
 		} else {
 			toastStore.trigger(createToast('Email or password incorrect', 'error'));
-			console.log('error');
 		}
 	}
 </script>

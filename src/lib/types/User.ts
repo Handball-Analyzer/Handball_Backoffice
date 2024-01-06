@@ -3,7 +3,7 @@ import type { Team } from './Team';
 import type { Club } from './Club';
 
 export type User = {
-	id: UUID;
+	id: UUID ;
 	email: string;
 	firstname: string;
 	lastname: string;

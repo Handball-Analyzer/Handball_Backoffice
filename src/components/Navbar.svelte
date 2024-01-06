@@ -1,7 +1,5 @@
 <script lang="ts">
 	import { AppBar } from '@skeletonlabs/skeleton';
-	import { page } from '$app/stores';
-	import { writable } from 'svelte/store';
 </script>
 
 <AppBar gridColumns="grid-cols-3" slotDefault="place-self-center" slotTrail="place-content-end">

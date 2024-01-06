@@ -7,21 +7,55 @@
 	import { get } from 'svelte/store';
 	import { token } from '$lib/Store';
 	import { onMount } from 'svelte';
-	import { changeActiveUser, loadData, userDetails } from './request';
+	import { changeActiveUser, loadData, removeClubfromUser, userDetails } from './request';
 	import { initializeStores } from '@skeletonlabs/skeleton';
 	import { getToastStore } from '@skeletonlabs/skeleton';
 	import { createToast } from '$lib/Toast';
+	import { Modal, getModalStore } from '@skeletonlabs/skeleton';
+	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
+	import AddClubtoUser from '../../components/models/addClubtoUser.svelte';
+	import type { UUID } from 'crypto';
 
 	initializeStores();
 	const toastStore = getToastStore();
+	const modalStore = getModalStore();
 	let allUserData: User[] = [];
 	let userDetail: UserDetails = { Teams: [], Clubs: [] };
+	let selecet_User: User = {
+		id:'181c45d9-adc9-4070-82d8-bcf5cb46c236',
+		firstname: '',
+		lastname: '',
+		email: '',
+		role: '',
+		active: true,
+		gender: ''
+
+	};
+	let removeClubid:string;
+	const addclub: ModalComponent = { ref: AddClubtoUser };
+
+	const addClubModel: ModalSettings = {
+		type: 'component',
+		component: addclub,
+		meta: {
+			userId: ''
+		}
+		
+	};
+
+	const removeClubModal: ModalSettings = {
+		type: 'confirm',
+		// Data
+		title: 'Please Confirm',
+		body: 'Are you sure you wish to remove club?',
+		// TRUE if confirm pressed, FALSE if cancel pressed
+		response: (r: boolean) => removeClubfromUser(get(token), removeClubid, selecet_User.id, r)
+	};
 
 	let filtervalue: string = '';
 
 	onMount(async () => {
 		allUserData = await loadData(get(token));
-		console.log(allUserData);
 		tableSimple.body = tableMapperValues(allUserData, ['id', 'firstname', 'lastname', 'active']);
 		tableSimple.meta = tableMapperValues(allUserData, [
 			'id',
@@ -35,7 +69,8 @@
 		tableSimple.foot = ['Total', '', '<code class="code">' + allUserData.length + '</code>'];
 	});
 
-	let selecet_User: User;
+
+
 
 	const tableSimple: TableSource = {
 		// A list of heading labels.
@@ -58,7 +93,6 @@
 		};
 	}
 	async function changeActive() {
-		console.log(selecet_User);
 		const status = await changeActiveUser(selecet_User.id, get(token));
 		await window.location.reload();
 		if (status == 200) {
@@ -80,11 +114,21 @@
 		tableSimple.body = tableMapperValues(filterData, ['id', 'firstname', 'lastname', 'active']);
 		tableSimple.foot = ['Total', '', '<code class="code">' + filterData.length + '</code>'];
 	}
+	function openModelAddClub() {
+		addClubModel.meta.userId = selecet_User.id;
+		modalStore.trigger(addClubModel);
+
+	}
+	function openModelRemoveClub(event: Event) {
+		removeClubid = (event.target as HTMLElement)?.id;
+		modalStore.trigger(removeClubModal);
+	}
 
 	let tabSet: number = 0;
 </script>
 
 <Toast />
+<Modal/>
 <main class="m-3">
 	<div class="flex flex-row w-screen justify-between">
 		<h1 class="h2">Accounts</h1>
@@ -106,7 +150,7 @@
 
 				<Table interactive={true} on:selected={selected} source={tableSimple} />
 			</div>
-			{#if selecet_User != undefined}
+			{#if selecet_User.id != '181c45d9-adc9-4070-82d8-bcf5cb46c236'}
 				<div class="w-1/2 h-full m-2">
 					<div class="h-full">
 						<div class="flex flex-row">
@@ -175,21 +219,25 @@
 										</label>
 									</div>
 								{:else if tabSet === 1}
-									{#if userDetail.Clubs.length > 0}
-										<div class="overflow-scroll h-[47vh]">
-											<dl class="list-dl">
-												{#each userDetail.Clubs as club}
-													<div>
-														<span class="flex-auto">
-															<dt>{club.name}</dt>
-														</span>
-													</div>
-												{/each}
-											</dl>
-										</div>
-									{:else}
-										<p>Keine Teams vorhanden</p>
-									{/if}
+									<div class="overflow-scroll h-[47vh]">
+										<dl class="list-dl">
+											{#each userDetail.Clubs as club}
+												<div>
+													<span class="flex-auto">
+														<dt>{club.name}</dt>
+													</span>
+													<button id={club.id} on:click={openModelRemoveClub} class="btn variant-filled-error"
+														>Remove</button
+													>
+												</div>
+											{/each}
+											<div>
+												<button on:click={openModelAddClub} class="btn variant-filled-primary"
+													>Add</button
+												>
+											</div>
+										</dl>
+									</div>
 								{:else if tabSet === 2}
 									{#if userDetail.Teams.length > 0}
 										<div class="overflow-scroll h-[47vh]">
@@ -237,12 +285,6 @@
 							</svelte:fragment>
 						</TabGroup>
 					</div>
-					{#if selecet_User.id != null}
-						<button
-							class="float-right btn variant-filled"
-							on:click={() => alert('Wurde Erfolgreich gespeichert!')}>Save</button
-						>
-					{/if}
 				</div>
 			{/if}
 		</div>

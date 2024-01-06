@@ -3,7 +3,6 @@
 	import type { TableSource } from '@skeletonlabs/skeleton';
 	import { tableMapperValues } from '@skeletonlabs/skeleton';
 	import { TabGroup, Tab } from '@skeletonlabs/skeleton';
-	import Gym from '../../lib/data/Gym.json';
 	import type { Club, ClubDetails } from '$lib/types/Club';
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
@@ -28,16 +27,6 @@
 		tableSimple.foot = ['Total', '<code class="code">' + clubData.length + '</code>'];
 	});
 
-	const teams = [
-		{ UUID: 123456, gender: 'g', age_group: 'E', Coach: 'Felix Link', number: 1 },
-		{ UUID: 123456, gender: 'm', age_group: 'D', Coach: 'Felix Link', number: 1 },
-		{ UUID: 123456, gender: 'm', age_group: 'C', Coach: 'Felix Link', number: 2 },
-		{ UUID: 123456, gender: 'm', age_group: 'C', Coach: 'Felix Link', number: 1 },
-		{ UUID: 123456, gender: 'm', age_group: 'B', Coach: 'Felix Link', number: 2 },
-		{ UUID: 123456, gender: 'm', age_group: 'A', Coach: 'Felix Link', number: 2 },
-		{ UUID: 123456, gender: 'w', age_group: 'Z', Coach: 'Felix Link', number: 2 }
-	];
-	const gyms = Gym;
 	let selectedClub: Club = {
 		id: null,
 		name: '',
@@ -238,12 +227,6 @@
 					</svelte:fragment>
 				</TabGroup>
 			</div>
-			{#if selectedClub.id != null}
-				<button
-					class="float-right btn variant-filled"
-					on:click={() => alert('Wurde Erfolgreich gespeichert!' + selectedClub.id)}>Save</button
-				>
-			{/if}
 		</div>
 	</div>
 </main>
