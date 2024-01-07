@@ -8,3 +8,11 @@ export type Gym = {
 	plz: number;
 	street: string;
 };
+
+export type createGymDto = {
+	name: string;
+	housenumber: number;
+	location: string;
+	plz: number;
+	street: string;
+};

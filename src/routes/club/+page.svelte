@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Table } from '@skeletonlabs/skeleton';
-	import type { TableSource } from '@skeletonlabs/skeleton';
+	import { Table, Modal, getModalStore, initializeStores } from '@skeletonlabs/skeleton';
+	import type { ModalComponent, ModalSettings, TableSource } from '@skeletonlabs/skeleton';
 	import { tableMapperValues } from '@skeletonlabs/skeleton';
 	import { TabGroup, Tab } from '@skeletonlabs/skeleton';
 	import type { Club, ClubDetails } from '$lib/types/Club';
@@ -8,9 +8,22 @@
 	import { get } from 'svelte/store';
 	import { token } from '$lib/Store';
 	import { getClubs, getDetails } from './request';
+	import CreateGymbyClub from '../../components/models/createGymbyClub.svelte';
 
 	let filtervalue: string = '';
 	let clubDetails: ClubDetails = { Teams: [], Gyms: [] };
+	initializeStores();
+	const modalStore = getModalStore();
+
+	const addclub: ModalComponent = { ref: CreateGymbyClub };
+
+	const createGymModel: ModalSettings = {
+		type: 'component',
+		component: addclub,
+		meta: {
+			clubId: ''
+		}
+	};
 
 	let clubData: Club[] = [];
 	onMount(async () => {
@@ -64,9 +77,15 @@
 		tableSimple.foot = ['Total', '<code class="code">' + filterData.length + '</code>'];
 	}
 
+	function openModelcreateGym() {
+		createGymModel.meta.clubId = selectedClub.id;
+		modalStore.trigger(createGymModel);
+	}
+
 	let tabSet: number = 0;
 </script>
 
+<Modal />
 <main class="m-3">
 	<div class="flex flex-row w-screen justify-between">
 		<h1 class="h2">Club</h1>
@@ -91,6 +110,7 @@
 				source={tableSimple}
 			/>
 		</div>
+		{#if selectedClub.id != null}
 		<div class="w-1/2 h-full m-2">
 			<div class="h-full">
 				<h1 class="h3">Club Detail View</h1>
@@ -176,40 +196,39 @@
 								</div>
 							</div>
 						{:else if tabSet === 2}
-							{#if clubDetails.Gyms.length > 0}
-								<dl class="list-dl">
-									{#each clubDetails.Gyms as gym}
-										<div>
-											<span class="flex-auto">
-												<dt>{gym.name}</dt>
-												<dd>{gym.plz} {gym.location}, {gym.street} {gym.housenumber}</dd>
-											</span>
-										</div>
-									{/each}
+							<dl class="list-dl">
+								{#each clubDetails.Gyms as gym}
+									<div>
+										<span class="flex-auto">
+											<dt>{gym.name}</dt>
+											<dd>{gym.plz} {gym.location}, {gym.street} {gym.housenumber}</dd>
+										</span>
+										<button id={gym.id} class="btn variant-filled">Edit</button>
+										<button id={gym.id} class="btn variant-filled-error">Remove</button>
+									</div>
+								{/each}
+								<button on:click={openModelcreateGym} class="btn variant-filled-primary">
+									add
+								</button>
 
-									<!-- ... -->
-								</dl>
-							{:else}
-								<p>Keine Hallen vorhanden</p>
-							{/if}
+								<!-- ... -->
+							</dl>
 						{:else if tabSet === 3}
 							<p>Tab 2</p>
 						{:else if tabSet === 4}
-							{#if clubDetails.Teams.length > 0}
-								<div class="overflow-scroll h-[47vh]">
-									<dl class="list-dl">
-										{#each clubDetails.Teams as team}
-											<div>
-												<span class="flex-auto">
-													<dt>{team.gender + team.agegroup + team.number}</dt>
-												</span>
-											</div>
-										{/each}
-									</dl>
-								</div>
-							{:else}
-								<p>Keine Teams vorhanden</p>
-							{/if}
+							<div class="overflow-scroll h-[47vh]">
+								<dl class="list-dl">
+									{#each clubDetails.Teams as team}
+										<div>
+											<span class="flex-auto">
+												<dt>{team.gender + team.agegroup + team.number}</dt>
+											</span>
+											<button class="btn variant-filled-error">Remove</button>
+										</div>
+									{/each}
+									<button class="btn variant-filled-primary">add</button>
+								</dl>
+							</div>
 						{:else if tabSet === 5}
 							<p>Tab 4</p>
 						{:else if tabSet === 6}
@@ -228,6 +247,7 @@
 				</TabGroup>
 			</div>
 		</div>
+		{/if}
 	</div>
 </main>
 

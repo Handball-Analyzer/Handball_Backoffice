@@ -21,16 +21,7 @@
 	const modalStore = getModalStore();
 	let allUserData: User[] = [];
 	let userDetail: UserDetails = { Teams: [], Clubs: [] };
-	let selecet_User: User = {
-		id:'181c45d9-adc9-4070-82d8-bcf5cb46c236',
-		firstname: '',
-		lastname: '',
-		email: '',
-		role: '',
-		active: true,
-		gender: ''
-
-	};
+	let selecetUser: User
 	let removeClubid:string;
 	const addclub: ModalComponent = { ref: AddClubtoUser };
 
@@ -49,7 +40,7 @@
 		title: 'Please Confirm',
 		body: 'Are you sure you wish to remove club?',
 		// TRUE if confirm pressed, FALSE if cancel pressed
-		response: (r: boolean) => removeClubfromUser(get(token), removeClubid, selecet_User.id, r)
+		response: (r: boolean) => removeClubfromUser(get(token), removeClubid, selecetUser.id, r)
 	};
 
 	let filtervalue: string = '';
@@ -82,7 +73,7 @@
 	async function selected(event: { detail: any }) {
 		userDetail = await userDetails(get(token), event.detail[0]);
 		let selectedRow = event.detail;
-		selecet_User = {
+		selecetUser = {
 			id: selectedRow[0],
 			firstname: selectedRow[1],
 			lastname: selectedRow[2],
@@ -93,7 +84,7 @@
 		};
 	}
 	async function changeActive() {
-		const status = await changeActiveUser(selecet_User.id, get(token));
+		const status = await changeActiveUser(selecetUser.id, get(token));
 		await window.location.reload();
 		if (status == 200) {
 			toastStore.trigger(createToast('User status wurde erfolgreich geändert', 'success'));
@@ -115,7 +106,7 @@
 		tableSimple.foot = ['Total', '', '<code class="code">' + filterData.length + '</code>'];
 	}
 	function openModelAddClub() {
-		addClubModel.meta.userId = selecet_User.id;
+		addClubModel.meta.userId = selecetUser.id;
 		modalStore.trigger(addClubModel);
 
 	}
@@ -150,14 +141,14 @@
 
 				<Table interactive={true} on:selected={selected} source={tableSimple} />
 			</div>
-			{#if selecet_User.id != '181c45d9-adc9-4070-82d8-bcf5cb46c236'}
+			{#if selecetUser != undefined}
 				<div class="w-1/2 h-full m-2">
 					<div class="h-full">
 						<div class="flex flex-row">
-							<h1 class="h3 mr-2">{selecet_User.lastname}, {selecet_User.firstname}</h1>
-							{#if selecet_User.active}
+							<h1 class="h3 mr-2">{selecetUser.lastname}, {selecetUser.firstname}</h1>
+							{#if selecetUser.active}
 								<span class="chip variant-ghost-success">Active</span>
-							{:else if !selecet_User.active}
+							{:else if !selecetUser.active}
 								<span class="chip variant-ghost-error">Disabled</span>
 							{/if}
 						</div>
@@ -174,7 +165,7 @@
 										<label class="label col-start-1 row-start-1">
 											<span>UUID:</span>
 											<input
-												bind:value={selecet_User.id}
+												bind:value={selecetUser.id}
 												class="input"
 												type="text"
 												placeholder="Input"
@@ -184,7 +175,7 @@
 										<label class="label col-start-1 row-start-2">
 											<span>Firstname:</span>
 											<input
-												bind:value={selecet_User.firstname}
+												bind:value={selecetUser.firstname}
 												class="input"
 												type="text"
 												placeholder="Input"
@@ -193,7 +184,7 @@
 										<label class="label col-start-2 row-start-2">
 											<span>Lastname:</span>
 											<input
-												bind:value={selecet_User.lastname}
+												bind:value={selecetUser.lastname}
 												class="input"
 												type="text"
 												placeholder="Input"
@@ -202,7 +193,7 @@
 										<label class="label col-start-1 row-start-3">
 											<span>Email:</span>
 											<input
-												bind:value={selecet_User.email}
+												bind:value={selecetUser.email}
 												class="input"
 												type="text"
 												placeholder="Input"
@@ -211,7 +202,7 @@
 										<label class="label col-start-2 row-start-3">
 											<span>Role:</span>
 											<input
-												bind:value={selecet_User.role}
+												bind:value={selecetUser.role}
 												class="input"
 												type="text"
 												placeholder="Input"
@@ -267,7 +258,7 @@
 									<div class="flex flex-col">
 										<div class="flex flex-row">
 											<label class="label">
-												{#if selecet_User.active == true}
+												{#if selecetUser.active == true}
 													<span>Disable Account:</span>
 													<button on:click={changeActive} class="btn variant-filled"
 														>Disable account</button

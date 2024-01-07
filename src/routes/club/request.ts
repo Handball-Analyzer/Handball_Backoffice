@@ -1,5 +1,7 @@
 import { serverUrl } from '$lib/Store';
 import type { Club, ClubDetails } from '$lib/types/Club';
+import type { createGymDto } from '$lib/types/Gym';
+import type { UUID } from 'crypto';
 import { get } from 'svelte/store';
 
 export async function getClubs(token: string) {
@@ -31,4 +33,23 @@ export async function getDetails(token: string, clubId: string) {
 		clubDetails.Gyms = await responseGyms.json();
 	}
 	return clubDetails;
+}
+
+export async function createGym(token: string, clubId: UUID, gym: createGymDto) {
+	const serverURL = get(serverUrl);
+	const response = await fetch(serverURL + '/clubgym/' + clubId , {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token
+		},
+		body: JSON.stringify({
+			name: gym.name,
+			housenumber: gym.housenumber,
+			location: gym.location,
+			plz: gym.plz,
+			street: gym.street
+		})
+	});
+	return response.status;
 }
